@@ -54,14 +54,19 @@ npm install
 
 ### Development
 
-Start both client and server concurrently:
-```bash
-npm run dev
-```
+Run client and server in **separate terminals**:
 
-This will start:
-- Client on http://localhost:5173
-- Server on http://localhost:3001
+**Terminal 1 - Start the server:**
+```bash
+npm run dev:server
+```
+Server will run on http://localhost:3001
+
+**Terminal 2 - Start the client:**
+```bash
+npm run dev:client
+```
+Client will run on http://localhost:5173
 
 ### Running Tests
 
@@ -134,6 +139,3 @@ store-inventory/
 - Run tests before pushing changes
 - Check for console errors in browser and terminal
 
-## License
-
-MIT
