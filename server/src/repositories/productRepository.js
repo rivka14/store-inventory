@@ -5,10 +5,6 @@ export const productRepository = {
     return Array.from(products.values());
   },
 
-  getByName(name) {
-    return products.get(name);
-  },
-
   create(name) {
     products.set(name, { name });
     return { name };
