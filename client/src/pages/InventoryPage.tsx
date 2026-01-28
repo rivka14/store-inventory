@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,12 +24,14 @@ export function InventoryPage() {
   const resetInventory = useResetInventory();
 
   const { items, isDirty, addItem, removeItem, setItems, reset } = useInventoryStore();
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
-    if (serverInventory) {
+    if (serverInventory && !hasInitialized.current) {
       setItems(serverInventory);
+      hasInitialized.current = true;
     }
-  }, [serverInventory, setItems]);
+  }, [serverInventory]);
 
   const availableProducts = products.filter(
     (product) => !items.some((item) => item.name === product.name)
