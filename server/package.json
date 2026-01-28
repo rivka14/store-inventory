@@ -24,15 +24,5 @@
     "jest": "^29.7.0",
     "supertest": "^6.3.3",
     "eslint": "^8.56.0"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "transform": {},
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ]
   }
 }
