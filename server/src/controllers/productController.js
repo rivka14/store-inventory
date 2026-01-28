@@ -13,8 +13,9 @@ export const productController = {
   async create(req, res, next) {
     try {
       const { name } = req.body;
-      const product = productService.createProduct(name);
-      res.status(201).json(product);
+      productService.createProduct(name);
+      const allProducts = productService.getAllProducts();
+      res.status(200).json(allProducts);
     } catch (error) {
       next(error);
     }

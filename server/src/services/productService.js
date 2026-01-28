@@ -9,8 +9,8 @@ export const productService = {
   createProduct(name) {
     if (productRepository.exists(name)) {
       throw {
-        statusCode: 409,
-        message: `Product with name "${name}" already exists`,
+        statusCode: 400,
+        message: 'product name already exists',
       };
     }
     return productRepository.create(name);
