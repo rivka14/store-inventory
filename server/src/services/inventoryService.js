@@ -32,7 +32,7 @@ export const inventoryService = {
       if (!productRepository.exists(item.name)) {
         throw {
           statusCode: 400,
-          message: `Product "${item.name}" does not exist`,
+          message: 'Some of the inventory items are missing in the products list',
         };
       }
     }
