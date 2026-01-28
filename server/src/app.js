@@ -2,6 +2,9 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
+import productRoutes from './routes/productRoutes.js';
+import inventoryRoutes from './routes/inventoryRoutes.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
@@ -25,23 +28,13 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+app.use('/product', productRoutes);
+app.use('/inventory', inventoryRoutes);
+
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal server error';
-
-  if (process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line no-console
-    console.error(err);
-  }
-
-  res.status(statusCode).json({
-    error: message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
-  });
-});
+app.use(errorHandler);
 
 export default app;
