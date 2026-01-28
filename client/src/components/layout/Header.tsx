@@ -12,7 +12,7 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
             <Package className="h-6 w-6 text-primary" strokeWidth={2.5} />
-            <h1 className="text-xl font-semibold tracking-tight">
+            <h1 className="text-xl font-semibold tracking-tight max-[500px]:hidden">
               Store Inventory
             </h1>
           </div>
