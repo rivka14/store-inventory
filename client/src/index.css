@@ -32,6 +32,9 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
+    --stock: 142 71% 45%;
+    --stock-foreground: 0 0% 98%;
+
     --border: 42 20% 88%;
     --input: 42 20% 88%;
     --ring: 28 75% 52%;
@@ -60,5 +63,15 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  .animate-shake {
+    animation: shake 0.3s ease-in-out;
   }
 }

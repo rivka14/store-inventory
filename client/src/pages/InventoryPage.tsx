@@ -23,7 +23,7 @@ export function InventoryPage() {
   const saveInventory = useSaveInventory();
   const resetInventory = useResetInventory();
 
-  const { items, isDirty, addItem, removeItem, setItems, reset } = useInventoryStore();
+  const { items, isDirty, addItem, removeItem, updateQuantity, setItems, reset } = useInventoryStore();
   const hasInitialized = useRef(false);
 
   useEffect(() => {
@@ -152,7 +152,7 @@ export function InventoryPage() {
               Current Stock ({items.length})
             </h3>
           </div>
-          <InventoryList items={items} onRemove={removeItem} />
+          <InventoryList items={items} onRemove={removeItem} onQuantityChange={updateQuantity} />
         </Card>
 
         {items.length > 0 && (

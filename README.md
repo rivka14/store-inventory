@@ -139,3 +139,25 @@ store-inventory/
 - Run tests before pushing changes
 - Check for console errors in browser and terminal
 
+## Future Improvements
+
+### Deployment
+- **Docker containerization** - Create Dockerfile and docker-compose for easy deployment
+- **Cloud deployment** - Deploy to platforms like Vercel (frontend), Railway/Render (backend)
+- **CI/CD pipeline** - Automate testing and deployment with GitHub Actions
+- **Environment configuration** - Proper environment variable management for production
+
+### Product Images
+- **Image upload** - Add ability to upload product images
+- **Image storage** - Integrate with cloud storage (AWS S3, Cloudinary)
+- **Image gallery** - Display product images in product cards and detail views
+- **Image optimization** - Resize and compress images for optimal performance
+
+### Additional Features
+- **User authentication** - Add login/signup with role-based access control
+- **Search and filtering** - Search products and filter inventory
+- **Audit logs** - Track inventory changes with timestamps and user info
+- **Export functionality** - Export inventory data to CSV/Excel
+- **Dashboard analytics** - Visualize inventory trends and low-stock alerts
+- **Barcode scanning** - Mobile barcode scanner for quick product lookup
+
