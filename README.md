@@ -24,7 +24,7 @@ A full-stack inventory management application with React 18 + TypeScript fronten
 
 ### Backend
 - Node.js with Express
-- In-memory data storage
+- MongoDB with Mongoose for data persistence
 - Express Validator for validation
 - Helmet for security
 - CORS enabled

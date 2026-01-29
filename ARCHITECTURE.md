@@ -25,10 +25,11 @@ This is a monorepo-based full-stack application using npm workspaces. The archit
 - ES modules for modern JavaScript features
 - Suitable for the project's complexity level
 
-**In-Memory Storage**
-- Simplifies deployment (no database setup required)
-- Sufficient for demo/prototype purposes
-- Easy to replace with persistent storage later
+**MongoDB with Mongoose**
+- Persistent data storage with document-based structure
+- Schema validation at database level
+- Efficient queries with indexes
+- Production-ready storage solution
 
 #### Layered Architecture
 
@@ -37,9 +38,9 @@ Routes → Controllers → Services → Repositories
 ```
 
 **Repositories**: Data access layer
-- Encapsulates in-memory storage
-- Simple CRUD operations
-- Easy to swap for database implementation
+- Encapsulates MongoDB operations via Mongoose
+- CRUD operations with lean queries for performance
+- Abstraction layer for data persistence
 
 **Services**: Business logic layer
 - Validation rules (uniqueness, inventory checks)
@@ -200,24 +201,24 @@ components/
 - Minimal re-renders (React Hook Form, Zustand)
 
 **Backend**:
-- Simple in-memory operations (fast)
-- No database latency
+- Lean queries for optimal MongoDB performance
+- Indexed fields for faster lookups
 - Lightweight middleware stack
 
 ### Scalability Considerations
 
 **Current Limitations**:
-- In-memory storage (data lost on restart)
 - No authentication/authorization
-- No pagination
+- No pagination for large datasets
 - Single server instance
+- No horizontal scaling strategy
 
 **Future Enhancements**:
-- Database integration (PostgreSQL/MongoDB)
-- User authentication
+- User authentication and role-based access control
 - Pagination for large datasets
-- Caching layer (Redis)
-- WebSocket for real-time updates
+- Caching layer (Redis) for frequently accessed data
+- Load balancing for horizontal scaling
+- WebSocket for real-time inventory updates
 
 ### Development Workflow
 
@@ -243,11 +244,12 @@ components/
 
 ### Chosen Approach vs Alternatives
 
-**In-Memory Storage vs Database**:
-- ✅ Simpler setup, no infrastructure
-- ✅ Faster for small datasets
-- ❌ Data not persisted
-- ❌ Can't scale horizontally
+**MongoDB vs SQL Database**:
+- ✅ Flexible schema for evolving requirements
+- ✅ Simple document structure matches API responses
+- ✅ Good developer experience with Mongoose
+- ❌ No complex joins or transactions
+- ❌ Less strict data integrity guarantees
 
 **JavaScript vs TypeScript (Backend)**:
 - ✅ No build step, faster iteration
