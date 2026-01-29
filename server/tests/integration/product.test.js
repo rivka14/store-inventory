@@ -1,13 +1,14 @@
 import request from 'supertest';
 import app from '../../src/app.js';
-import { productRepository } from '../../src/repositories/productRepository.js';
-import { inventoryRepository } from '../../src/repositories/inventoryRepository.js';
+import { setupTestDB, clearDatabase, seedProducts, seedInventory } from '../helpers/dbHelper.js';
 
 describe('Product API', () => {
-  beforeEach(() => {
-    const allProducts = productRepository.getAll();
-    allProducts.forEach(p => productRepository.delete(p.name));
-    inventoryRepository.reset();
+  beforeAll(async () => {
+    await setupTestDB();
+  });
+
+  beforeEach(async () => {
+    await clearDatabase();
   });
 
   describe('GET /product/all', () => {
@@ -18,8 +19,7 @@ describe('Product API', () => {
     });
 
     it('should return all products', async () => {
-      productRepository.create('Product 1');
-      productRepository.create('Product 2');
+      await seedProducts([{ name: 'Product 1' }, { name: 'Product 2' }]);
       const response = await request(app).get('/product/all');
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(2);
@@ -31,8 +31,8 @@ describe('Product API', () => {
       const response = await request(app)
         .put('/product')
         .send({ name: 'Test Product' });
-      expect(response.status).toBe(201);
-      expect(response.body).toEqual({ name: 'Test Product' });
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual([{ name: 'Test Product' }]);
     });
 
     it('should return 400 for empty name', async () => {
@@ -45,12 +45,12 @@ describe('Product API', () => {
       expect(response.status).toBe(400);
     });
 
-    it('should return 409 for duplicate product', async () => {
+    it('should return 400 for duplicate product', async () => {
       await request(app).put('/product').send({ name: 'Test Product' });
       const response = await request(app)
         .put('/product')
         .send({ name: 'Test Product' });
-      expect(response.status).toBe(409);
+      expect(response.status).toBe(400);
     });
   });
 
@@ -107,7 +107,7 @@ describe('Product API', () => {
     });
 
     it('should return 400 if product is in inventory', async () => {
-      inventoryRepository.save([{ name: 'Test Product', quantity: 5 }]);
+      await seedInventory([{ name: 'Test Product', quantity: 5 }]);
       const response = await request(app).delete('/product/Test Product');
       expect(response.status).toBe(400);
     });

@@ -1,15 +1,15 @@
 import request from 'supertest';
 import app from '../../src/app.js';
-import { productRepository } from '../../src/repositories/productRepository.js';
-import { inventoryRepository } from '../../src/repositories/inventoryRepository.js';
+import { setupTestDB, clearDatabase, seedProducts, seedInventory } from '../helpers/dbHelper.js';
 
 describe('Inventory API', () => {
-  beforeEach(() => {
-    const allProducts = productRepository.getAll();
-    allProducts.forEach(p => productRepository.delete(p.name));
-    inventoryRepository.reset();
-    productRepository.create('Product 1');
-    productRepository.create('Product 2');
+  beforeAll(async () => {
+    await setupTestDB();
+  });
+
+  beforeEach(async () => {
+    await clearDatabase();
+    await seedProducts([{ name: 'Product 1' }, { name: 'Product 2' }]);
   });
 
   describe('GET /inventory', () => {
@@ -20,7 +20,7 @@ describe('Inventory API', () => {
     });
 
     it('should return current inventory', async () => {
-      inventoryRepository.save([
+      await seedInventory([
         { name: 'Product 1', quantity: 5 },
         { name: 'Product 2', quantity: 10 },
       ]);
@@ -89,7 +89,7 @@ describe('Inventory API', () => {
 
   describe('POST /inventory/reset', () => {
     it('should clear all inventory items', async () => {
-      inventoryRepository.save([{ name: 'Product 1', quantity: 5 }]);
+      await seedInventory([{ name: 'Product 1', quantity: 5 }]);
       const response = await request(app).post('/inventory/reset');
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
