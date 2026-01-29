@@ -18,8 +18,8 @@ describe('Inventory Repository', () => {
 
     it('should return saved inventory', async () => {
       const items = [
-        { name: 'Product 1', quantity: 5 },
-        { name: 'Product 2', quantity: 10 },
+        { productName: 'Product 1', quantity: 5 },
+        { productName: 'Product 2', quantity: 10 },
       ];
       await inventoryRepository.save(items);
       const inventory = await inventoryRepository.getAll();
@@ -29,14 +29,14 @@ describe('Inventory Repository', () => {
 
   describe('save', () => {
     it('should save inventory items', async () => {
-      const items = [{ name: 'Product 1', quantity: 5 }];
+      const items = [{ productName: 'Product 1', quantity: 5 }];
       const result = await inventoryRepository.save(items);
       expect(result).toEqual(items);
     });
 
     it('should replace existing inventory', async () => {
-      await inventoryRepository.save([{ name: 'Product 1', quantity: 5 }]);
-      const newItems = [{ name: 'Product 2', quantity: 10 }];
+      await inventoryRepository.save([{ productName: 'Product 1', quantity: 5 }]);
+      const newItems = [{ productName: 'Product 2', quantity: 10 }];
       await inventoryRepository.save(newItems);
       const inventory = await inventoryRepository.getAll();
       expect(inventory).toEqual(newItems);
@@ -45,7 +45,7 @@ describe('Inventory Repository', () => {
 
   describe('reset', () => {
     it('should clear all inventory items', async () => {
-      await inventoryRepository.save([{ name: 'Product 1', quantity: 5 }]);
+      await inventoryRepository.save([{ productName: 'Product 1', quantity: 5 }]);
       await inventoryRepository.reset();
       const inventory = await inventoryRepository.getAll();
       expect(inventory).toEqual([]);
@@ -54,12 +54,12 @@ describe('Inventory Repository', () => {
 
   describe('hasProduct', () => {
     it('should return true if product exists in inventory', async () => {
-      await inventoryRepository.save([{ name: 'Product 1', quantity: 5 }]);
+      await inventoryRepository.save([{ productName: 'Product 1', quantity: 5 }]);
       expect(await inventoryRepository.hasProduct('Product 1')).toBe(true);
     });
 
     it('should return false if product does not exist in inventory', async () => {
-      await inventoryRepository.save([{ name: 'Product 1', quantity: 5 }]);
+      await inventoryRepository.save([{ productName: 'Product 1', quantity: 5 }]);
       expect(await inventoryRepository.hasProduct('Product 2')).toBe(false);
     });
 

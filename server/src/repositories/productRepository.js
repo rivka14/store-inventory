@@ -27,7 +27,7 @@ export const productRepository = {
   },
 
   async exists(name) {
-    const count = await Product.countDocuments({ name });
-    return count > 0;
+    const doc = await Product.findOne({ name }).select('_id').lean();
+    return !!doc;
   },
 };
