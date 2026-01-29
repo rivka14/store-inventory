@@ -49,14 +49,18 @@ export function ProductItem({
           <div className="flex items-center gap-2">
             <Package
               className={`h-4 w-4 shrink-0 ${
-                isInInventory ? 'text-accent' : 'text-muted-foreground'
+                isInInventory ? 'text-stock' : 'text-accent'
               }`}
             />
             <span className="font-mono font-medium truncate">{product.name}</span>
           </div>
-          {isInInventory && (
-            <span className="text-xs bg-accent/10 text-accent px-2 py-0.5 rounded font-medium">
+          {isInInventory ? (
+            <span className="text-xs bg-stock/10 text-stock px-2 py-0.5 rounded font-medium">
               In Stock
+            </span>
+          ) : (
+            <span className="text-xs bg-accent/10 text-accent px-2 py-0.5 rounded font-medium">
+              Not in Stock
             </span>
           )}
         </div>

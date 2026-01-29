@@ -6,10 +6,11 @@ import { ClipboardList } from 'lucide-react';
 interface InventoryListProps {
   items: InventoryItemType[];
   onRemove: (name: string) => void;
+  onQuantityChange: (name: string, quantity: number) => void;
   isLoading?: boolean;
 }
 
-export function InventoryList({ items, onRemove, isLoading = false }: InventoryListProps) {
+export function InventoryList({ items, onRemove, onQuantityChange, isLoading = false }: InventoryListProps) {
   if (isLoading) {
     return (
       <div className="space-y-3">
@@ -35,7 +36,7 @@ export function InventoryList({ items, onRemove, isLoading = false }: InventoryL
   return (
     <div className="space-y-3">
       {items.map((item) => (
-        <InventoryItem key={item.name} item={item} onRemove={onRemove} />
+        <InventoryItem key={item.name} item={item} onRemove={onRemove} onQuantityChange={onQuantityChange} />
       ))}
     </div>
   );
