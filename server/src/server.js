@@ -1,19 +1,41 @@
+import 'dotenv/config';
 import app from './app.js';
+import { connectDB, disconnectDB } from './db/index.js';
 
 const PORT = process.env.PORT || 3001;
 
-const server = app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server running on port ${PORT}`);
-});
+let server;
 
-const shutdown = () => {
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    server = app.listen(PORT, () => {
+      // eslint-disable-next-line no-console
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+const shutdown = async () => {
   // eslint-disable-next-line no-console
   console.log('\nShutting down server...');
-  server.close(() => {
-    // eslint-disable-next-line no-console
-    console.log('Server closed');
-    process.exit(0);
+
+  server.close(async () => {
+    try {
+      await disconnectDB();
+      // eslint-disable-next-line no-console
+      console.log('Server closed');
+      process.exit(0);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error during shutdown:', error);
+      process.exit(1);
+    }
   });
 
   setTimeout(() => {
@@ -25,5 +47,7 @@ const shutdown = () => {
 
 process.on('SIGTERM', shutdown);
 process.on('SIGINT', shutdown);
+
+startServer();
 
 export default server;

@@ -12,4 +12,7 @@ export default {
       statements: 80,
     },
   },
+  maxWorkers: 1,
+  forceExit: true,
+  testTimeout: 10000,
 };

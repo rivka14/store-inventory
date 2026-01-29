@@ -1,21 +1,36 @@
-let inventory = [];
+import { Inventory } from '../db/index.js';
+
+const getOrCreateInventory = async () => {
+  let inventory = await Inventory.findOne();
+  if (!inventory) {
+    inventory = new Inventory({ items: [] });
+    await inventory.save();
+  }
+  return inventory;
+};
 
 export const inventoryRepository = {
-  getAll() {
-    return [...inventory];
+  async getAll() {
+    const inventory = await getOrCreateInventory();
+    return inventory.items;
   },
 
-  save(items) {
-    inventory = [...items];
-    return inventory;
+  async save(items) {
+    let inventory = await getOrCreateInventory();
+    inventory.items = items;
+    await inventory.save();
+    return inventory.items;
   },
 
-  reset() {
-    inventory = [];
-    return inventory;
+  async reset() {
+    let inventory = await getOrCreateInventory();
+    inventory.items = [];
+    await inventory.save();
+    return inventory.items;
   },
 
-  hasProduct(productName) {
-    return inventory.some(item => item.name === productName);
+  async hasProduct(productName) {
+    const inventory = await getOrCreateInventory();
+    return inventory.items.some(item => item.name === productName);
   },
 };

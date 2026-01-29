@@ -3,7 +3,7 @@ import { inventoryService } from '../services/inventoryService.js';
 export const inventoryController = {
   async getInventory(req, res, next) {
     try {
-      const inventory = inventoryService.getInventory();
+      const inventory = await inventoryService.getInventory();
       res.json(inventory);
     } catch (error) {
       next(error);
@@ -13,7 +13,7 @@ export const inventoryController = {
   async saveInventory(req, res, next) {
     try {
       const items = req.body;
-      const inventory = inventoryService.saveInventory(items);
+      const inventory = await inventoryService.saveInventory(items);
       res.json(inventory);
     } catch (error) {
       next(error);
@@ -22,7 +22,7 @@ export const inventoryController = {
 
   async resetInventory(req, res, next) {
     try {
-      const inventory = inventoryService.resetInventory();
+      const inventory = await inventoryService.resetInventory();
       res.json(inventory);
     } catch (error) {
       next(error);
