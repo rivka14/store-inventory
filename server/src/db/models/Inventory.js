@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
-const inventoryItemSchema = new mongoose.Schema({
-  name: {
+const inventorySchema = new mongoose.Schema({
+  productName: {
     type: String,
     required: [true, 'Product name is required'],
-    trim: true
+    trim: true,
+    unique: true
   },
   quantity: {
     type: Number,
@@ -15,18 +16,9 @@ const inventoryItemSchema = new mongoose.Schema({
       message: 'Quantity must be an integer'
     }
   }
-}, { _id: false });
-
-const inventorySchema = new mongoose.Schema({
-  items: {
-    type: [inventoryItemSchema],
-    default: []
-  }
 }, {
   timestamps: true,
   versionKey: false
 });
-
-inventorySchema.index({ 'items.name': 1 });
 
 export const Inventory = mongoose.model('Inventory', inventorySchema);

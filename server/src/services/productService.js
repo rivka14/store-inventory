@@ -1,5 +1,6 @@
 import { productRepository } from '../repositories/productRepository.js';
 import { inventoryRepository } from '../repositories/inventoryRepository.js';
+import { AppError } from '../utils/AppError.js';
 
 export const productService = {
   async getAllProducts() {
@@ -8,27 +9,18 @@ export const productService = {
 
   async createProduct(name) {
     if (await productRepository.exists(name)) {
-      throw {
-        statusCode: 400,
-        message: `Product with name "${name}" already exists`,
-      };
+      throw new AppError(`Product with name "${name}" already exists`, 400);
     }
     return await productRepository.create(name);
   },
 
   async updateProduct(oldName, newName) {
     if (!(await productRepository.exists(oldName))) {
-      throw {
-        statusCode: 404,
-        message: `Product "${oldName}" not found`,
-      };
+      throw new AppError(`Product "${oldName}" not found`, 404);
     }
 
     if (oldName !== newName && (await productRepository.exists(newName))) {
-      throw {
-        statusCode: 409,
-        message: `Product with name "${newName}" already exists`,
-      };
+      throw new AppError(`Product with name "${newName}" already exists`, 409);
     }
 
     return await productRepository.update(oldName, newName);
@@ -36,17 +28,11 @@ export const productService = {
 
   async deleteProduct(name) {
     if (!(await productRepository.exists(name))) {
-      throw {
-        statusCode: 404,
-        message: `Product "${name}" not found`,
-      };
+      throw new AppError(`Product "${name}" not found`, 404);
     }
 
     if (await inventoryRepository.hasProduct(name)) {
-      throw {
-        statusCode: 400,
-        message: `Cannot delete product "${name}" as it exists in inventory`,
-      };
+      throw new AppError(`Cannot delete product "${name}" as it exists in inventory`, 400);
     }
 
     await productRepository.delete(name);

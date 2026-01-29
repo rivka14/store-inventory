@@ -27,6 +27,9 @@ export const seedProducts = async (products) => {
 };
 
 export const seedInventory = async (items) => {
-  const inventory = new Inventory({ items });
-  return await inventory.save();
+  const docs = items.map(item => ({
+    productName: item.name,
+    quantity: item.quantity
+  }));
+  return await Inventory.insertMany(docs);
 };
