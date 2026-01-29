@@ -10,7 +10,7 @@ export const productService = {
     if (await productRepository.exists(name)) {
       throw {
         statusCode: 400,
-        message: 'product name already exists',
+        message: `Product with name "${name}" already exists`,
       };
     }
     return await productRepository.create(name);
