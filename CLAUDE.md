@@ -29,3 +29,8 @@ Branch from main unless working on dependent feature.
 ### Before Commit
 1. **Commit the completed feature** with descriptive conventional commit message
 2. Run `unset GITHUB_TOKEN` before pushing to avoid authentication conflicts
+
+### Pull Requests
+**PR titles must follow Conventional Commits format**: `<type>(<scope>): <subject>`
+
+Match the PR title to the main commit or overall change purpose.
