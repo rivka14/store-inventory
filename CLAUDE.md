@@ -1,3 +1,25 @@
+## Project Overview
+
+**Store Inventory Management System** - A full-stack monorepo application for managing product inventory.
+
+### Tech Stack
+- **Frontend**: React 18 + TypeScript, Vite, TanStack Query, Zustand, React Hook Form, Tailwind CSS + shadcn/ui
+- **Backend**: Node.js + Express (JavaScript), MongoDB with Mongoose
+- **Testing**: Jest + Supertest (backend), Vitest + React Testing Library (frontend)
+
+### Architecture
+- Monorepo with npm workspaces (client/ and server/)
+- RESTful API with layered architecture: Routes → Controllers → Services → Repositories
+- MongoDB for persistent storage
+- Feature-based component organization
+
+### Key Features
+- Product management (CRUD operations)
+- Inventory tracking with quantities
+- Client and server-side validation
+- Real-time updates via TanStack Query
+- Responsive design with warm, earthy UI theme
+
 ## Code Style
 
 **No unnecessary comments** - Code should be self-documenting. Only add comments where logic isn't self-evident or for critical business rules.
