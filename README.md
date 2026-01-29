@@ -147,6 +147,10 @@ store-inventory/
 - **CI/CD pipeline** - Automate testing and deployment with GitHub Actions
 - **Environment configuration** - Proper environment variable management for production
 
+### Performance Optimization
+- **Redis caching layer** - Add Redis as an external cache in front of MongoDB for frequently accessed data (products list, inventory)
+- **MongoDB connection pooling** - Fine-tune connection pool settings for high concurrency
+
 ### Product Images
 - **Image upload** - Add ability to upload product images
 - **Image storage** - Integrate with cloud storage (AWS S3, Cloudinary)
