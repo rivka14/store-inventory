@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Trash2, Edit2, Check, X } from 'lucide-react';
@@ -13,18 +13,32 @@ interface InventoryItemProps {
 export function InventoryItem({ item, onRemove, onQuantityChange }: InventoryItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editQuantity, setEditQuantity] = useState(item.quantity.toString());
+  const [isInvalid, setIsInvalid] = useState(false);
+
+  useEffect(() => {
+    setEditQuantity(item.quantity.toString());
+  }, [item.quantity]);
 
   const handleConfirm = () => {
     const newQuantity = parseInt(editQuantity, 10);
-    if (!isNaN(newQuantity) && newQuantity > 0) {
+    const isValidInteger = !isNaN(newQuantity) &&
+                          newQuantity > 0 &&
+                          Number.isInteger(Number(editQuantity));
+
+    if (isValidInteger) {
       onQuantityChange(item.name, newQuantity);
       setIsEditing(false);
+      setIsInvalid(false);
+    } else {
+      setIsInvalid(true);
+      setTimeout(() => setIsInvalid(false), 500);
     }
   };
 
   const handleCancel = () => {
     setEditQuantity(item.quantity.toString());
     setIsEditing(false);
+    setIsInvalid(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -46,9 +60,13 @@ export function InventoryItem({ item, onRemove, onQuantityChange }: InventoryIte
             value={editQuantity}
             onChange={(e) => setEditQuantity(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-20 h-8 font-mono text-primary font-semibold"
+            className={`min-w-20 h-8 font-mono text-primary font-semibold ${
+              isInvalid ? 'border-destructive animate-shake' : ''
+            }`}
             min="1"
+            step="1"
             autoFocus
+            aria-label="Edit quantity"
           />
         ) : (
           <span className="font-mono text-primary font-semibold">{item.quantity}</span>
@@ -62,6 +80,7 @@ export function InventoryItem({ item, onRemove, onQuantityChange }: InventoryIte
               size="icon"
               onClick={handleConfirm}
               className="h-8 w-8 hover:text-stock hover:bg-stock/10"
+              aria-label="Confirm quantity change"
             >
               <Check className="h-4 w-4" />
             </Button>
@@ -70,6 +89,7 @@ export function InventoryItem({ item, onRemove, onQuantityChange }: InventoryIte
               size="icon"
               onClick={handleCancel}
               className="h-8 w-8 hover:text-destructive hover:bg-destructive/10"
+              aria-label="Cancel editing"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -81,6 +101,7 @@ export function InventoryItem({ item, onRemove, onQuantityChange }: InventoryIte
               size="icon"
               onClick={() => setIsEditing(true)}
               className="h-8 w-8"
+              aria-label="Edit quantity"
             >
               <Edit2 className="h-4 w-4" />
             </Button>
@@ -89,6 +110,7 @@ export function InventoryItem({ item, onRemove, onQuantityChange }: InventoryIte
               size="icon"
               onClick={() => onRemove(item.name)}
               className="h-8 w-8 hover:text-destructive hover:bg-destructive/10"
+              aria-label={`Remove ${item.name} from inventory`}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
