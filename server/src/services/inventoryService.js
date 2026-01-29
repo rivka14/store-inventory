@@ -2,11 +2,11 @@ import { inventoryRepository } from '../repositories/inventoryRepository.js';
 import { productRepository } from '../repositories/productRepository.js';
 
 export const inventoryService = {
-  getInventory() {
-    return inventoryRepository.getAll();
+  async getInventory() {
+    return await inventoryRepository.getAll();
   },
 
-  saveInventory(items) {
+  async saveInventory(items) {
     if (!Array.isArray(items)) {
       throw {
         statusCode: 400,
@@ -29,7 +29,7 @@ export const inventoryService = {
         };
       }
 
-      if (!productRepository.exists(item.name)) {
+      if (!(await productRepository.exists(item.name))) {
         throw {
           statusCode: 400,
           message: 'Some of the inventory items are missing in the products list',
@@ -46,10 +46,10 @@ export const inventoryService = {
       };
     }
 
-    return inventoryRepository.save(items);
+    return await inventoryRepository.save(items);
   },
 
-  resetInventory() {
-    return inventoryRepository.reset();
+  async resetInventory() {
+    return await inventoryRepository.reset();
   },
 };

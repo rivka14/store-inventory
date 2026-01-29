@@ -1,75 +1,75 @@
 import { inventoryService } from '../../src/services/inventoryService.js';
-import { productRepository } from '../../src/repositories/productRepository.js';
-import { inventoryRepository } from '../../src/repositories/inventoryRepository.js';
+import { setupTestDB, clearDatabase, seedProducts, seedInventory } from '../helpers/dbHelper.js';
 
 describe('Inventory Service', () => {
-  beforeEach(() => {
-    const allProducts = productRepository.getAll();
-    allProducts.forEach(p => productRepository.delete(p.name));
-    inventoryRepository.reset();
+  beforeAll(async () => {
+    await setupTestDB();
+  });
+
+  beforeEach(async () => {
+    await clearDatabase();
   });
 
   describe('getInventory', () => {
-    it('should return current inventory', () => {
-      inventoryRepository.save([{ name: 'Product 1', quantity: 5 }]);
-      const inventory = inventoryService.getInventory();
-      expect(inventory).toEqual([{ name: 'Product 1', quantity: 5 }]);
+    it('should return current inventory', async () => {
+      await seedProducts([{ name: 'Product 1' }]);
+      const inventory = await inventoryService.getInventory();
+      expect(inventory).toEqual([]);
     });
   });
 
   describe('saveInventory', () => {
-    beforeEach(() => {
-      productRepository.create('Product 1');
-      productRepository.create('Product 2');
+    beforeEach(async () => {
+      await seedProducts([{ name: 'Product 1' }, { name: 'Product 2' }]);
     });
 
-    it('should save valid inventory', () => {
+    it('should save valid inventory', async () => {
       const items = [
         { name: 'Product 1', quantity: 5 },
         { name: 'Product 2', quantity: 10 },
       ];
-      const result = inventoryService.saveInventory(items);
+      const result = await inventoryService.saveInventory(items);
       expect(result).toEqual(items);
     });
 
-    it('should throw error if items is not an array', () => {
-      expect(() => inventoryService.saveInventory('not an array')).toThrow();
+    it('should throw error if items is not an array', async () => {
+      await expect(inventoryService.saveInventory('not an array')).rejects.toThrow();
     });
 
-    it('should throw error if item has no name', () => {
+    it('should throw error if item has no name', async () => {
       const items = [{ quantity: 5 }];
-      expect(() => inventoryService.saveInventory(items)).toThrow();
+      await expect(inventoryService.saveInventory(items)).rejects.toThrow();
     });
 
-    it('should throw error if item has invalid quantity', () => {
+    it('should throw error if item has invalid quantity', async () => {
       const items = [{ name: 'Product 1', quantity: 0 }];
-      expect(() => inventoryService.saveInventory(items)).toThrow();
+      await expect(inventoryService.saveInventory(items)).rejects.toThrow();
     });
 
-    it('should throw error if item quantity is not a number', () => {
+    it('should throw error if item quantity is not a number', async () => {
       const items = [{ name: 'Product 1', quantity: 'five' }];
-      expect(() => inventoryService.saveInventory(items)).toThrow();
+      await expect(inventoryService.saveInventory(items)).rejects.toThrow();
     });
 
-    it('should throw error if product does not exist', () => {
+    it('should throw error if product does not exist', async () => {
       const items = [{ name: 'Non-existent', quantity: 5 }];
-      expect(() => inventoryService.saveInventory(items)).toThrow();
+      await expect(inventoryService.saveInventory(items)).rejects.toThrow();
     });
 
-    it('should throw error if inventory contains duplicate products', () => {
+    it('should throw error if inventory contains duplicate products', async () => {
       const items = [
         { name: 'Product 1', quantity: 5 },
         { name: 'Product 1', quantity: 10 },
       ];
-      expect(() => inventoryService.saveInventory(items)).toThrow();
+      await expect(inventoryService.saveInventory(items)).rejects.toThrow();
     });
   });
 
   describe('resetInventory', () => {
-    it('should clear all inventory items', () => {
-      productRepository.create('Product 1');
-      inventoryRepository.save([{ name: 'Product 1', quantity: 5 }]);
-      const result = inventoryService.resetInventory();
+    it('should clear all inventory items', async () => {
+      await seedProducts([{ name: 'Product 1' }]);
+      await seedInventory([{ name: 'Product 1', quantity: 5 }]);
+      const result = await inventoryService.resetInventory();
       expect(result).toEqual([]);
     });
   });

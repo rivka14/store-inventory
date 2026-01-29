@@ -3,7 +3,7 @@ import { productService } from '../services/productService.js';
 export const productController = {
   async getAll(req, res, next) {
     try {
-      const products = productService.getAllProducts();
+      const products = await productService.getAllProducts();
       res.json(products);
     } catch (error) {
       next(error);
@@ -13,8 +13,8 @@ export const productController = {
   async create(req, res, next) {
     try {
       const { name } = req.body;
-      productService.createProduct(name);
-      const allProducts = productService.getAllProducts();
+      await productService.createProduct(name);
+      const allProducts = await productService.getAllProducts();
       res.status(200).json(allProducts);
     } catch (error) {
       next(error);
@@ -25,7 +25,7 @@ export const productController = {
     try {
       const { name: oldName } = req.params;
       const { name: newName } = req.body;
-      const product = productService.updateProduct(oldName, newName);
+      const product = await productService.updateProduct(oldName, newName);
       res.json(product);
     } catch (error) {
       next(error);
@@ -35,7 +35,7 @@ export const productController = {
   async delete(req, res, next) {
     try {
       const { name } = req.params;
-      const result = productService.deleteProduct(name);
+      const result = await productService.deleteProduct(name);
       res.json(result);
     } catch (error) {
       next(error);

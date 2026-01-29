@@ -1,29 +1,33 @@
-const products = new Map();
+import { Product } from '../db/index.js';
 
 export const productRepository = {
-  getAll() {
-    return Array.from(products.values());
+  async getAll() {
+    return await Product.find({}).select('-_id name').lean();
   },
 
-  create(name) {
-    products.set(name, { name });
-    return { name };
+  async create(name) {
+    const product = new Product({ name });
+    await product.save();
+    return { name: product.name };
   },
 
-  update(oldName, newName) {
-    const product = products.get(oldName);
-    if (!product) return null;
+  async update(oldName, newName) {
+    const product = await Product.findOneAndUpdate(
+      { name: oldName },
+      { name: newName },
+      { new: true, runValidators: true }
+    ).select('-_id name').lean();
 
-    products.delete(oldName);
-    products.set(newName, { name: newName });
-    return { name: newName };
+    return product;
   },
 
-  delete(name) {
-    return products.delete(name);
+  async delete(name) {
+    const result = await Product.deleteOne({ name });
+    return result.deletedCount > 0;
   },
 
-  exists(name) {
-    return products.has(name);
+  async exists(name) {
+    const count = await Product.countDocuments({ name });
+    return count > 0;
   },
 };
