@@ -17,7 +17,7 @@ export function useSaveInventory() {
 
   return useMutation({
     mutationFn: async (items: InventoryItem[]) => {
-      const { data } = await api.post<InventoryItem[]>('/inventory', items);
+      const { data } = await api.post<InventoryItem[]>('/inventory', { items });
       return data;
     },
     onSuccess: () => {
