@@ -7,14 +7,18 @@
 ### Directory Structure
 ```
 src/
-├── config/         # Database connection, environment config
+├── db/             # Database connection and Mongoose models
+│   ├── models/     # Mongoose schemas (Product, Inventory)
+│   ├── connection.js
+│   └── index.js
 ├── controllers/    # HTTP request/response handlers (thin layer)
 ├── middleware/     # Express middleware (validation, error handling)
-├── models/         # Mongoose schemas and models
 ├── repositories/   # Data access layer (MongoDB operations)
 ├── routes/         # API route definitions
 ├── services/       # Business logic and validation
-└── server.js       # Express app entry point
+├── utils/          # Utility classes (AppError)
+├── app.js          # Express app configuration
+└── server.js       # Server entry point with DB connection
 ```
 
 ### Layer Responsibilities
@@ -77,11 +81,9 @@ src/
 - Return detailed error messages for validation failures
 
 ### Response Format
+Success responses return data directly:
 ```json
-{
-  "data": {...},
-  "message": "Success message"
-}
+[{ "name": "product1" }]
 ```
 
 Error format:
@@ -92,15 +94,51 @@ Error format:
 }
 ```
 
+### API Endpoints
+
+#### Products (`/product`)
+- **GET /product/all**
+  - Response: `Array<{ name: string }>`
+- **PUT /product**
+  - Request: `{ name: string }`
+  - Response: `Array<{ name: string }>` (all products)
+  - Errors:
+    - 400: `{ "error": "product name already exists" }`
+    - 400: `{ "error": "invalid product, name is missing" }`
+- **PATCH /product/:name**
+  - Request: `{ name: string }`
+  - Response: `{ name: string }`
+- **DELETE /product/:name**
+  - Response: `{ message: string }`
+
+#### Inventory (`/inventory`)
+- **GET /inventory**
+  - Response: `Array<{ name: string, quantity: number }>`
+- **POST /inventory**
+  - Request: `Array<{ name: string, quantity: number }>` (array directly, not wrapped)
+  - Response: `Array<{ name: string, quantity: number }>`
+  - Errors:
+    - 400: `{ "error": "Some of the inventory items are missing in the products list" }`
+    - 400: `{ "error": "Some of the inventory items are missing attribute: \"name\" or \"quantity\"" }`
+- **POST /inventory/reset**
+  - Response: `[]`
+
 ## Testing
 
 ### Test Structure
-- Unit tests for services and repositories
-- Integration tests for API endpoints
+
+**Integration Tests** (`tests/integration/`)
+- Full API request/response cycle with real DB
+- Test complete user workflows
 - Use supertest for HTTP testing
 
+**Service & Repository Tests** (`tests/services/`, `tests/repositories/`)
+- Currently use real MongoDB test database
+- Test business logic and data operations
+- Future: Refactor to use mocks for true unit testing
+
 ### Coverage Requirements
-- Maintain >80% coverage
+- Maintain >80% coverage on all metrics
 - Test both success and error cases
 - Test validation rules
 - Test business logic edge cases
@@ -108,6 +146,12 @@ Error format:
 ### Test Files Location
 - `tests/` directory at server root
 - Mirror `src/` structure in tests
+
+### Testing Best Practices
+- Integration tests verify end-to-end functionality
+- Service/repository tests verify logic correctness
+- All tests use isolated test database
+- Tests run serially to avoid conflicts (`maxWorkers: 1`)
 
 ## Environment Variables
 

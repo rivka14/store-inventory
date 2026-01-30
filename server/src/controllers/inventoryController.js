@@ -12,7 +12,7 @@ export const inventoryController = {
 
   async saveInventory(req, res, next) {
     try {
-      const { items } = req.body;
+      const items = req.body;
       const inventory = await inventoryService.saveInventory(items);
       res.json(inventory);
     } catch (error) {

@@ -36,7 +36,7 @@ describe('Inventory API', () => {
         { name: 'Product 1', quantity: 5 },
         { name: 'Product 2', quantity: 10 },
       ];
-      const response = await request(app).post('/inventory').send({ items });
+      const response = await request(app).post('/inventory').send(items);
       expect(response.status).toBe(200);
       expect(response.body).toEqual(items);
     });
@@ -44,25 +44,25 @@ describe('Inventory API', () => {
     it('should return 400 for invalid items format', async () => {
       const response = await request(app)
         .post('/inventory')
-        .send({ items: 'not an array' });
+        .send('not an array');
       expect(response.status).toBe(400);
     });
 
     it('should return 400 for missing name', async () => {
       const items = [{ quantity: 5 }];
-      const response = await request(app).post('/inventory').send({ items });
+      const response = await request(app).post('/inventory').send(items);
       expect(response.status).toBe(400);
     });
 
     it('should return 400 for invalid quantity', async () => {
       const items = [{ name: 'Product 1', quantity: 0 }];
-      const response = await request(app).post('/inventory').send({ items });
+      const response = await request(app).post('/inventory').send(items);
       expect(response.status).toBe(400);
     });
 
     it('should return 400 for non-existent product', async () => {
       const items = [{ name: 'Non-existent', quantity: 5 }];
-      const response = await request(app).post('/inventory').send({ items });
+      const response = await request(app).post('/inventory').send(items);
       expect(response.status).toBe(400);
     });
 
@@ -71,17 +71,17 @@ describe('Inventory API', () => {
         { name: 'Product 1', quantity: 5 },
         { name: 'Product 1', quantity: 10 },
       ];
-      const response = await request(app).post('/inventory').send({ items });
+      const response = await request(app).post('/inventory').send(items);
       expect(response.status).toBe(400);
     });
 
     it('should replace existing inventory', async () => {
       await request(app)
         .post('/inventory')
-        .send({ items: [{ name: 'Product 1', quantity: 5 }] });
+        .send([{ name: 'Product 1', quantity: 5 }]);
       const response = await request(app)
         .post('/inventory')
-        .send({ items: [{ name: 'Product 2', quantity: 10 }] });
+        .send([{ name: 'Product 2', quantity: 10 }]);
       expect(response.status).toBe(200);
       expect(response.body).toEqual([{ name: 'Product 2', quantity: 10 }]);
     });

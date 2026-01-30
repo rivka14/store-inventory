@@ -13,16 +13,12 @@ export const inventoryService = {
 
   async saveInventory(items) {
     if (!Array.isArray(items)) {
-      throw new AppError('Inventory must be an array', 400);
+      throw new AppError('Some of the inventory items are missing attribute: "name" or "quantity"', 400);
     }
 
     for (const item of items) {
-      if (!item.name || typeof item.name !== 'string') {
-        throw new AppError('Each item must have a valid name', 400);
-      }
-
-      if (!item.quantity || typeof item.quantity !== 'number' || item.quantity <= 0) {
-        throw new AppError(`Item "${item.name}" must have a positive quantity`, 400);
+      if (!item.name || typeof item.name !== 'string' || !item.quantity || typeof item.quantity !== 'number' || item.quantity <= 0) {
+        throw new AppError('Some of the inventory items are missing attribute: "name" or "quantity"', 400);
       }
 
       if (!(await productRepository.exists(item.name))) {

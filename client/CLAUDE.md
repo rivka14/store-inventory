@@ -140,13 +140,27 @@ const mutation = useMutation({
 - Proper error extraction
 
 ### API Endpoints
+
+#### Products
 - `GET /product/all` - Get all products
+  - Response: `Array<{ name: string }>`
 - `PUT /product` - Create product
-- `PATCH /product/:name` - Update product
+  - Request: `{ name: string }`
+  - Response: `Array<{ name: string }>`
+- `PATCH /product/:name` - Update product name
+  - Request: `{ name: string }`
+  - Response: `{ name: string }`
 - `DELETE /product/:name` - Delete product
-- `GET /inventory` - Get inventory
-- `POST /inventory` - Save inventory
-- `POST /inventory/reset` - Clear inventory
+  - Response: `{ message: string }`
+
+#### Inventory
+- `GET /inventory` - Get current inventory
+  - Response: `Array<{ name: string, quantity: number }>`
+- `POST /inventory` - Save/replace entire inventory
+  - Request: `Array<{ name: string, quantity: number }>`
+  - Response: `Array<{ name: string, quantity: number }>`
+- `POST /inventory/reset` - Clear all inventory
+  - Response: `[]`
 
 ## Testing
 

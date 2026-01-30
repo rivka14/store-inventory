@@ -24,7 +24,7 @@ A full-stack inventory management application with React 18 + TypeScript fronten
 
 ### Backend
 - Node.js with Express
-- In-memory data storage
+- MongoDB with Mongoose for data persistence
 - Express Validator for validation
 - Helmet for security
 - CORS enabled
@@ -146,6 +146,10 @@ store-inventory/
 - **Cloud deployment** - Deploy to platforms like Vercel (frontend), Railway/Render (backend)
 - **CI/CD pipeline** - Automate testing and deployment with GitHub Actions
 - **Environment configuration** - Proper environment variable management for production
+
+### Performance Optimization
+- **Redis caching layer** - Add Redis as an external cache in front of MongoDB for frequently accessed data (products list, inventory)
+- **MongoDB connection pooling** - Fine-tune connection pool settings for high concurrency
 
 ### Product Images
 - **Image upload** - Add ability to upload product images
