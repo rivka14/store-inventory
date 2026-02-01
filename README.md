@@ -2,7 +2,10 @@
 
 A full-stack inventory management application with React 18 + TypeScript frontend and Node.js + Express backend.
 
-![Demo](demo.mp4)
+
+https://github.com/user-attachments/assets/5bbb5fd6-43bb-40e5-969f-bb34d40bc480
+
+
 
 ## Features
 
