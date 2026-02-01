@@ -2,6 +2,8 @@
 
 A full-stack inventory management application with React 18 + TypeScript frontend and Node.js + Express backend.
 
+![Demo](demo.mp4)
+
 ## Features
 
 - **Product Management**: Create, update, and delete products
